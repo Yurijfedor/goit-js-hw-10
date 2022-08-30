@@ -10,6 +10,17 @@ body {
   background-color: #fafafa;
   color: #212121;
   line-height: 1.5;
+  padding: 20px;
+}
+
+ul {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+p {
+  margin: 0;
 }
 
 #search-box {
@@ -17,4 +28,42 @@ body {
   padding: 8px;
   max-width: 320px;
   margin-bottom: 16px;
+}
+
+#search-box:hover,
+#search-box:focus,
+#search-box:active {
+  border-color: blue;
+  outline-color: blue;
+}
+
+.country-list_item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.flag-svg {
+  margin-right: 20px;
+  width: 60px;
+  height: 40px;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  background-image: url('https://flagcdn.com/ua.svg');
+}
+
+.country-list_text {
+  font-size: large;
+  font-weight: bold;
+}
+
+.country-info_title {
+  display: flex;
+}
+
+.country-info_item {
+  font-size: large;
+  font-weight: bold;
+  line-height: 2.25;
 }
