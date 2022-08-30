@@ -14,18 +14,20 @@ let debouncedFetchCountries = debounce(() => {
   if (!name) {
     return;
   }
-  fetchCountries(name).then(res => {
-    if (res.length > 10) {
-      return Notify.info(
-        'Too many matches found. Please enter a more specific name.'
-      );
-    } else if (res.length >= 2 && res.length <= 10) {
-      console.log(res);
-
-      return renderList(res);
-    }
-    renderInfo(res);
-  });
+  fetchCountries(name)
+    .then(res => {
+      if (res.length > 10) {
+        return Notify.info(
+          'Too many matches found. Please enter a more specific name.'
+        );
+      } else if (res.length >= 2 && res.length <= 10) {
+        clearMarkup();
+        return renderList(res);
+      }
+      clearMarkup();
+      renderInfo(res);
+    })
+    .catch(onFetchError);
 }, DEBOUNCE_DELAY);
 
 refs.inputCountries.addEventListener(
@@ -55,10 +57,14 @@ function renderInfo(arrOfCountries) {
 }
 
 function getLanguages(arrOfLanguages) {
-  arrOfLanguages.map(({ name }) => name).join(',');
+  return arrOfLanguages.map(({ name }) => name).join(', ');
 }
 
-// return response.map(({ flags, name }) => console.log(flags.svg, name));
-// response.map(({ flags, name, capital, population, languages }) =>
-//   console.log(flags.svg, name, capital, population, languages)
-// );
+function clearMarkup() {
+  refs.countryList.innerHTML = '';
+  refs.countryInfo.innerHTML = '';
+}
+
+function onFetchError() {
+  return Notify.failure('Oops, there is no country with that name');
+}
