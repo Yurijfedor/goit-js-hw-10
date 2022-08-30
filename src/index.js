@@ -9,31 +9,30 @@ const refs = {
   countryInfo: document.querySelector('.country-info'),
 };
 
-let debouncedFetchCountries = debounce(() => {
+let onFetchCountries = debounce(() => {
   const name = refs.inputCountries.value.trim();
   if (!name) {
     return;
   }
   fetchCountries(name)
-    .then(res => {
-      if (res.length > 10) {
+    .then(countries => {
+      if (countries.length > 10) {
         return Notify.info(
           'Too many matches found. Please enter a more specific name.'
         );
-      } else if (res.length >= 2 && res.length <= 10) {
+      } else if (countries.length >= 2 && countries.length <= 10) {
         clearMarkup();
-        return renderList(res);
+        return renderList(countries);
       }
       clearMarkup();
-      renderInfo(res);
+      renderInfo(countries);
     })
     .catch(onFetchError);
 }, DEBOUNCE_DELAY);
 
-refs.inputCountries.addEventListener(
-  'input',
-  debounce(debouncedFetchCountries)
-);
+refs.inputCountries.addEventListener('input', debounce(onFetchCountries));
+refs.inputCountries.addEventListener('focus', debounce(onFetchCountries));
+refs.countryList.addEventListener('click', selectCountry);
 
 function renderList(arrOfCountries) {
   arrOfCountries.map(({ flags, name }) => {
@@ -67,4 +66,16 @@ function clearMarkup() {
 
 function onFetchError() {
   return Notify.failure('Oops, there is no country with that name');
+}
+
+function selectCountry(event) {
+  if (event.target.nodeName !== 'P') {
+    return;
+  }
+  const nameCountry = event.target.textContent;
+  console.log(nameCountry);
+  fetchCountries(nameCountry).then(countries => {
+    clearMarkup();
+    renderInfo(countries);
+  });
 }

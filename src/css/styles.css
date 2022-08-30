@@ -58,6 +58,12 @@ p {
   font-weight: bold;
 }
 
+.country-list_text:hover,
+.country-list_text:focus {
+  color: blue;
+  cursor: pointer;
+}
+
 .country-info_title {
   display: flex;
 }
